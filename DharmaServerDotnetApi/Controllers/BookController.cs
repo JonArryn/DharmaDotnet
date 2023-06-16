@@ -1,5 +1,5 @@
 using DharmaServerDotnetApi.Models;
-using DharmaServerDotnetApi.Services.BookService;
+using DharmaServerDotnetApi.Repository.BookRepository;
 using Microsoft.AspNetCore.Mvc;
 
 namespace DharmaServerDotnetApi.Controllers;
@@ -8,23 +8,23 @@ namespace DharmaServerDotnetApi.Controllers;
 [Route( "api/[controller]" )]
 public class BookController : ControllerBase {
 
-    private readonly IBookService _bookService;
+    private readonly IBookRepository _bookRepository;
 
-    public BookController( IBookService bookService ) {
-        _bookService = bookService;
+    public BookController( IBookRepository bookRepository ) {
+        _bookRepository = bookRepository;
 
     }
 
     [HttpGet]
     public async Task<ActionResult<List<Book>>> GetAllBooks() {
 
-        return await _bookService.GetAllBooks();
+        return await _bookRepository.GetAllBooks();
     }
 
     [HttpGet( "{id}" )]
     public async Task<ActionResult<Book>> GetBookById( int id ) {
 
-        var result = await _bookService.GetBookById( id );
+        var result = await _bookRepository.GetBookById( id );
 
         if (result is null) {
             return NotFound( "Book not found" );
@@ -36,7 +36,7 @@ public class BookController : ControllerBase {
     [HttpPost]
     public async Task<ActionResult<Book>> CreateNewBook( Book newBook ) {
 
-        var result = await _bookService.CreateNewBook( newBook );
+        var result = await _bookRepository.CreateNewBook( newBook );
 
         return Ok( result );
 
@@ -45,7 +45,7 @@ public class BookController : ControllerBase {
     [HttpPut( "{id}" )]
     public async Task<ActionResult<Book>> UpdateBook( int id, Book newBookData ) {
 
-        var updatedBook = await _bookService.UpdateBook( id,
+        var updatedBook = await _bookRepository.UpdateBook( id,
                 newBookData );
 
         if (updatedBook is null) {
@@ -59,7 +59,7 @@ public class BookController : ControllerBase {
     [HttpDelete( "{id}" )]
     public async Task<ActionResult<Book>> DeleteBook( int id ) {
 
-        return Ok( await _bookService.DeleteBook( id ) );
+        return Ok( await _bookRepository.DeleteBook( id ) );
 
     }
 

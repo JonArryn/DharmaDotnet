@@ -1,5 +1,5 @@
 using DharmaServerDotnetApi.Database;
-using DharmaServerDotnetApi.Services;
+using DharmaServerDotnetApi.Repository;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder( args );

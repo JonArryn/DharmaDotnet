@@ -2,13 +2,13 @@ using DharmaServerDotnetApi.Database;
 using DharmaServerDotnetApi.Models;
 using Microsoft.EntityFrameworkCore;
 
-namespace DharmaServerDotnetApi.Services.BookService;
+namespace DharmaServerDotnetApi.Repository.BookRepository;
 
-public class BookService : IBookService {
+public class BookRepository : IBookRepository {
 
     private readonly DharmaDbContext _dbContext;
 
-    public BookService( DharmaDbContext dbContext ) {
+    public BookRepository( DharmaDbContext dbContext ) {
         _dbContext = dbContext;
 
     }

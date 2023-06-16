@@ -1,8 +1,8 @@
 using DharmaServerDotnetApi.Models;
 
-namespace DharmaServerDotnetApi.Services.BookService;
+namespace DharmaServerDotnetApi.Repository.BookRepository;
 
-public interface IBookService {
+public interface IBookRepository {
 
     Task<List<Book>> GetAllBooks();
 
