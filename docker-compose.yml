@@ -1,0 +1,6 @@
+﻿services:
+  dharmaserverdotnetapi:
+    image: dharmaserverdotnetapi
+    build:
+      context: .
+      dockerfile: DharmaServerDotnetApi/Dockerfile
