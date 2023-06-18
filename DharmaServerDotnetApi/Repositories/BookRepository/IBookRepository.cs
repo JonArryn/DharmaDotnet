@@ -1,12 +1,12 @@
 using DharmaServerDotnetApi.Models;
 
-namespace DharmaServerDotnetApi.Repository.BookRepository;
+namespace DharmaServerDotnetApi.Repositories.BookRepository;
 
 public interface IBookRepository {
 
-    Task<List<Book>> GetAllBooks();
+    Task<ICollection<Book>> GetAllBooks();
 
-    Task<Book>? GetBookById( int id );
+    Task<Book> GetBookById( int id );
 
     Task<Book> CreateNewBook( Book newBook );
 

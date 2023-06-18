@@ -1,8 +1,8 @@
-using DharmaServerDotnetApi.Repository.BookRepository;
+using DharmaServerDotnetApi.Repositories.BookRepository;
 
-namespace DharmaServerDotnetApi.Repository;
+namespace DharmaServerDotnetApi.Repositories;
 
-public static class ServiceRepo {
+public static class RepositoryService {
 
     public static void AddServiceRepo( this WebApplicationBuilder builder ) {
 

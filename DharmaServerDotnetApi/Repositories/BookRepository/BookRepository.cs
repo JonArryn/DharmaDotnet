@@ -2,7 +2,7 @@ using DharmaServerDotnetApi.Database;
 using DharmaServerDotnetApi.Models;
 using Microsoft.EntityFrameworkCore;
 
-namespace DharmaServerDotnetApi.Repository.BookRepository;
+namespace DharmaServerDotnetApi.Repositories.BookRepository;
 
 public class BookRepository : IBookRepository {
 
@@ -13,22 +13,20 @@ public class BookRepository : IBookRepository {
 
     }
 
-    public async Task<List<Book>> GetAllBooks() {
-        var books = await _dbContext.Book.ToListAsync();
+// GET ALL
+    public async Task<ICollection<Book>> GetAllBooks() {
+        return await _dbContext.Book.ToListAsync();
 
-        return books;
     }
 
+// GET BY ID
     public async Task<Book> GetBookById( int id ) {
         var book = await _dbContext.Book.FindAsync( id );
-
-        if (book is null) {
-            return null;
-        }
 
         return book;
     }
 
+// CREATE
     public async Task<Book> CreateNewBook( Book newBook ) {
         var bookEntry = await _dbContext.Book.AddAsync( newBook );
         await _dbContext.SaveChangesAsync();
@@ -38,6 +36,7 @@ public class BookRepository : IBookRepository {
         return book;
     }
 
+// UPDATE
     public async Task<Book> UpdateBook( int id, Book newBookData ) {
         var book = await _dbContext.Book.FindAsync( id );
 
@@ -55,6 +54,7 @@ public class BookRepository : IBookRepository {
         return updatedBook;
     }
 
+// DELETE
     public async Task<Book> DeleteBook( int id ) {
 
         var book = await _dbContext.Book.FindAsync( id );
@@ -67,6 +67,13 @@ public class BookRepository : IBookRepository {
         await _dbContext.SaveChangesAsync();
 
         return await _dbContext.Book.FindAsync( id );
+
+    }
+
+// HELPER
+    public async Task<bool> CheckBookExists( int bookId ) {
+
+        return await _dbContext.Book.AnyAsync( book => book.Id == bookId );
 
     }
 

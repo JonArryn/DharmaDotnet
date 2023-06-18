@@ -1,5 +1,6 @@
+using DharmaServerDotnetApi.Helpers;
 using DharmaServerDotnetApi.Models;
-using DharmaServerDotnetApi.Repository.BookRepository;
+using DharmaServerDotnetApi.Repositories.BookRepository;
 using Microsoft.AspNetCore.Mvc;
 
 namespace DharmaServerDotnetApi.Controllers;
@@ -16,9 +17,13 @@ public class BookController : ControllerBase {
     }
 
     [HttpGet]
-    public async Task<ActionResult<List<Book>>> GetAllBooks() {
+    public async Task<ActionResult<RepositoryResponse<ICollection<Book>>>> GetAllBooks() {
 
-        return await _bookRepository.GetAllBooks();
+        var rawBookList = await _bookRepository.GetAllBooks();
+
+        var result = CreateResponses<Book, BookDto>.CreateDtoListResponse( rawBookList );
+
+        return Ok( result );
     }
 
     [HttpGet( "{id}" )]
@@ -27,10 +32,15 @@ public class BookController : ControllerBase {
         var result = await _bookRepository.GetBookById( id );
 
         if (result is null) {
-            return NotFound( "Book not found" );
+            return NotFound();
+        }
+
+        if (!ModelState.IsValid) {
+            return BadRequest( ModelState );
         }
 
         return Ok( result );
+
     }
 
     [HttpPost]

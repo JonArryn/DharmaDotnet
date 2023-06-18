@@ -1,5 +1,5 @@
 using DharmaServerDotnetApi.Database;
-using DharmaServerDotnetApi.Repository;
+using DharmaServerDotnetApi.Repositories.BookRepository;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder( args );
@@ -13,8 +13,9 @@ builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-builder.AddServiceRepo();
 
+// builder.AddServiceRepo();
+builder.Services.AddScoped<IBookRepository, BookRepository>();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
