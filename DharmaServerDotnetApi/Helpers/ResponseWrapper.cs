@@ -1,6 +1,6 @@
 namespace DharmaServerDotnetApi.Helpers;
 
-public class RepositoryResponse<TData> {
+public class ResponseWrapper<TData> {
 
     public TData Data { get; set; }
     public bool Success { get; set; } = true;

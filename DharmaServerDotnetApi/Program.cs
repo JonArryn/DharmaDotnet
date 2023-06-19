@@ -1,5 +1,5 @@
 using DharmaServerDotnetApi.Database;
-using DharmaServerDotnetApi.Repositories.BookRepository;
+using DharmaServerDotnetApi.Repositories;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder( args );
@@ -14,8 +14,8 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-// builder.AddServiceRepo();
-builder.Services.AddScoped<IBookRepository, BookRepository>();
+builder.AddServiceRepo();
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

@@ -29,14 +29,14 @@ public class BookRepository : IBookRepository {
 // CREATE
     public async Task<Book> CreateNewBook( Book newBook ) {
         var bookEntry = await _dbContext.Book.AddAsync( newBook );
+
         await _dbContext.SaveChangesAsync();
 
-        var book = await _dbContext.Book.FindAsync( bookEntry.Entity.Id );
-
-        return book;
+        return bookEntry.Entity;
     }
 
 // UPDATE
+
     public async Task<Book> UpdateBook( int id, Book newBookData ) {
         var book = await _dbContext.Book.FindAsync( id );
 
@@ -49,12 +49,11 @@ public class BookRepository : IBookRepository {
 
         await _dbContext.SaveChangesAsync();
 
-        var updatedBook = await _dbContext.Book.FindAsync( id );
-
-        return updatedBook;
+        return book;
     }
 
 // DELETE
+
     public async Task<Book> DeleteBook( int id ) {
 
         var book = await _dbContext.Book.FindAsync( id );
@@ -63,10 +62,10 @@ public class BookRepository : IBookRepository {
             throw new Exception( "Book not found by the provided Id" );
         }
 
-        _dbContext.Book.Remove( book );
+        var result = _dbContext.Book.Remove( book );
         await _dbContext.SaveChangesAsync();
 
-        return await _dbContext.Book.FindAsync( id );
+        return result.Entity;
 
     }
 

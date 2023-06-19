@@ -17,21 +17,21 @@ public class BookController : ControllerBase {
     }
 
     [HttpGet]
-    public async Task<ActionResult<RepositoryResponse<ICollection<Book>>>> GetAllBooks() {
+    public async Task<ActionResult<ResponseWrapper<ICollection<Book>>>> GetAllBooks() {
 
         var rawBookList = await _bookRepository.GetAllBooks();
 
-        var result = CreateResponses<Book, BookDto>.CreateDtoListResponse( rawBookList );
+        var response = CreateResponse<Book, BookDto>.DtoListResponse( rawBookList );
 
-        return Ok( result );
+        return Ok( response );
     }
 
     [HttpGet( "{id}" )]
-    public async Task<ActionResult<Book>> GetBookById( int id ) {
+    public async Task<ActionResult<ResponseWrapper<Book>>> GetBookById( int id ) {
 
-        var result = await _bookRepository.GetBookById( id );
+        var book = await _bookRepository.GetBookById( id );
 
-        if (result is null) {
+        if (book is null) {
             return NotFound();
         }
 
@@ -39,21 +39,26 @@ public class BookController : ControllerBase {
             return BadRequest( ModelState );
         }
 
-        return Ok( result );
+        var response = CreateResponse<Book, BookDto>.SingleDtoResponse( book );
+
+        return Ok( response );
 
     }
 
     [HttpPost]
-    public async Task<ActionResult<Book>> CreateNewBook( Book newBook ) {
+    public async Task<ActionResult<ResponseWrapper<Book>>> CreateNewBook( Book newBook ) {
 
-        var result = await _bookRepository.CreateNewBook( newBook );
+        var createdBook = await _bookRepository.CreateNewBook( newBook );
 
-        return Ok( result );
+        var response = CreateResponse<Book, BookDto>.SingleDtoResponse( createdBook );
+
+        return Ok( response );
 
     }
 
+    // TODO update this to merge provided fields with existing data then save rather than explicitly updating fields
     [HttpPut( "{id}" )]
-    public async Task<ActionResult<Book>> UpdateBook( int id, Book newBookData ) {
+    public async Task<ActionResult<ResponseWrapper<Book>>> UpdateBook( int id, Book newBookData ) {
 
         var updatedBook = await _bookRepository.UpdateBook( id,
                 newBookData );
@@ -62,14 +67,21 @@ public class BookController : ControllerBase {
             return NotFound();
         }
 
-        return Ok( updatedBook );
+        var response = CreateResponse<Book, BookDto>.SingleDtoResponse( updatedBook );
+
+        return Ok( response );
 
     }
 
+    // TODO change to deleted at timestamp and return nothing
     [HttpDelete( "{id}" )]
-    public async Task<ActionResult<Book>> DeleteBook( int id ) {
+    public async Task<ActionResult<ResponseWrapper<Book>>> DeleteBook( int id ) {
 
-        return Ok( await _bookRepository.DeleteBook( id ) );
+        var deletedBook = await _bookRepository.DeleteBook( id );
+
+        var response = CreateResponse<Book, BookDto>.SingleDtoResponse( deletedBook );
+
+        return Ok();
 
     }
 
