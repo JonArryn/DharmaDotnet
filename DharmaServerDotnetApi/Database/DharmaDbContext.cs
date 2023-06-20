@@ -14,7 +14,6 @@ public class DharmaDbContext : DbContext {
     public DbSet<LibraryBook> LibraryBook { get; set; }
 
     protected override void OnModelCreating( ModelBuilder modelBuilder ) {
-
         modelBuilder.Entity<LibraryBook>()
                 .HasKey( libBook => libBook.Id );
 

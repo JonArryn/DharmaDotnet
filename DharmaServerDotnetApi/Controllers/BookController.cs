@@ -1,88 +1,59 @@
+using AutoMapper;
 using DharmaServerDotnetApi.Helpers;
 using DharmaServerDotnetApi.Models;
-using DharmaServerDotnetApi.Repositories.BookRepository;
+using DharmaServerDotnetApi.Repositories;
 using Microsoft.AspNetCore.Mvc;
 
 namespace DharmaServerDotnetApi.Controllers;
 
 [ApiController]
 [Route( "api/[controller]" )]
-public class BookController : ControllerBase {
+public class BookController : DharmaController {
 
-    private readonly IBookRepository _bookRepository;
+    private readonly IBookRepo _bookRepo;
+    private readonly IMapper _mapper;
 
-    public BookController( IBookRepository bookRepository ) {
-        _bookRepository = bookRepository;
-
+    public BookController( IBookRepo bookRepo, IMapper mapper ) {
+        _bookRepo = bookRepo;
+        _mapper   = mapper;
     }
 
     [HttpGet]
-    public async Task<ActionResult<ResponseWrapper<ICollection<Book>>>> GetAllBooks() {
+    public async Task<ActionResult<ICollection<DTOGetBook>>> GetAllBooks() {
+        var bookList = _mapper.Map<ICollection<DTOGetBook>>( await _bookRepo.GetAllBooks() );
 
-        var rawBookList = await _bookRepository.GetAllBooks();
-
-        var response = CreateResponse<Book, BookDto>.DtoListResponse( rawBookList );
-
-        return Ok( response );
+        return CreateResponse( bookList );
     }
 
     [HttpGet( "{id}" )]
-    public async Task<ActionResult<ResponseWrapper<Book>>> GetBookById( int id ) {
+    public async Task<ActionResult<DTOGetBook>> GetBookById( int id ) {
+        var book = _mapper.Map<DTOGetBook>( await _bookRepo.GetBookById( id ) );
 
-        var book = await _bookRepository.GetBookById( id );
-
-        if (book is null) {
-            return NotFound();
-        }
-
-        if (!ModelState.IsValid) {
-            return BadRequest( ModelState );
-        }
-
-        var response = CreateResponse<Book, BookDto>.SingleDtoResponse( book );
-
-        return Ok( response );
-
+        return CreateResponse( book );
     }
 
     [HttpPost]
-    public async Task<ActionResult<ResponseWrapper<Book>>> CreateNewBook( Book newBook ) {
+    public async Task<ActionResult<Book>> CreateNewBook( Book newBook ) {
+        var createdBook = await _bookRepo.CreateNewBook( newBook );
 
-        var createdBook = await _bookRepository.CreateNewBook( newBook );
-
-        var response = CreateResponse<Book, BookDto>.SingleDtoResponse( createdBook );
-
-        return Ok( response );
-
+        return CreateResponse( createdBook );
     }
 
     // TODO update this to merge provided fields with existing data then save rather than explicitly updating fields
     [HttpPut( "{id}" )]
-    public async Task<ActionResult<ResponseWrapper<Book>>> UpdateBook( int id, Book newBookData ) {
-
-        var updatedBook = await _bookRepository.UpdateBook( id,
+    public async Task<ActionResult<Book>> UpdateBook( int id, Book newBookData ) {
+        var updatedBook = await _bookRepo.UpdateBook( id,
                 newBookData );
 
-        if (updatedBook is null) {
-            return NotFound();
-        }
-
-        var response = CreateResponse<Book, BookDto>.SingleDtoResponse( updatedBook );
-
-        return Ok( response );
-
+        return CreateResponse( updatedBook );
     }
 
     // TODO change to deleted at timestamp and return nothing
     [HttpDelete( "{id}" )]
-    public async Task<ActionResult<ResponseWrapper<Book>>> DeleteBook( int id ) {
+    public async Task<ActionResult<Book>> DeleteBook( int id ) {
+        var deletedBook = await _bookRepo.DeleteBook( id );
 
-        var deletedBook = await _bookRepository.DeleteBook( id );
-
-        var response = CreateResponse<Book, BookDto>.SingleDtoResponse( deletedBook );
-
-        return Ok();
-
+        return CreateResponse( deletedBook );
     }
 
 }

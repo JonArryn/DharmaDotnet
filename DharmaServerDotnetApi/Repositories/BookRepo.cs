@@ -2,21 +2,35 @@ using DharmaServerDotnetApi.Database;
 using DharmaServerDotnetApi.Models;
 using Microsoft.EntityFrameworkCore;
 
-namespace DharmaServerDotnetApi.Repositories.BookRepository;
+namespace DharmaServerDotnetApi.Repositories;
 
-public class BookRepository : IBookRepository {
+public interface IBookRepo {
+
+    Task<ICollection<Book>> GetAllBooks();
+
+    Task<Book> GetBookById( int id );
+
+    Task<Book> CreateNewBook( Book newBook );
+
+    Task<Book> UpdateBook( int id, Book newBookData );
+
+    Task<Book> DeleteBook( int id );
+
+}
+
+//TODO want to return only IDs of related data with an ID such as author
+//TODO only expose related data on embeds
+public class BookRepo : IBookRepo {
 
     private readonly DharmaDbContext _dbContext;
 
-    public BookRepository( DharmaDbContext dbContext ) {
+    public BookRepo( DharmaDbContext dbContext ) {
         _dbContext = dbContext;
-
     }
 
 // GET ALL
     public async Task<ICollection<Book>> GetAllBooks() {
         return await _dbContext.Book.ToListAsync();
-
     }
 
 // GET BY ID
@@ -27,6 +41,7 @@ public class BookRepository : IBookRepository {
     }
 
 // CREATE
+//TODO newBook should be a createDto
     public async Task<Book> CreateNewBook( Book newBook ) {
         var bookEntry = await _dbContext.Book.AddAsync( newBook );
 
@@ -37,6 +52,7 @@ public class BookRepository : IBookRepository {
 
 // UPDATE
 
+//TODO set up mapping for possible partial updates
     public async Task<Book> UpdateBook( int id, Book newBookData ) {
         var book = await _dbContext.Book.FindAsync( id );
 
@@ -55,7 +71,6 @@ public class BookRepository : IBookRepository {
 // DELETE
 
     public async Task<Book> DeleteBook( int id ) {
-
         var book = await _dbContext.Book.FindAsync( id );
 
         if (book is null) {
@@ -66,14 +81,11 @@ public class BookRepository : IBookRepository {
         await _dbContext.SaveChangesAsync();
 
         return result.Entity;
-
     }
 
 // HELPER
     public async Task<bool> CheckBookExists( int bookId ) {
-
         return await _dbContext.Book.AnyAsync( book => book.Id == bookId );
-
     }
 
 }
