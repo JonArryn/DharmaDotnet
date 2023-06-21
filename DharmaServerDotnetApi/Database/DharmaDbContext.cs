@@ -15,17 +15,18 @@ public class DharmaDbContext : DbContext {
 
     protected override void OnModelCreating( ModelBuilder modelBuilder ) {
         modelBuilder.Entity<LibraryBook>()
-                .HasKey( libBook => libBook.Id );
+                    .HasKey( libBook => libBook.Id );
 
         modelBuilder.Entity<LibraryBook>()
-                .HasOne( book => book.Book )
-                .WithMany( libBook => libBook.LibraryBooks )
-                .HasForeignKey( book => book.BookId );
+                    .HasOne( book => book.Book )
+                    .WithMany( libBook => libBook.LibraryBooks )
+                    .HasForeignKey( book => book.BookId );
 
         modelBuilder.Entity<LibraryBook>()
-                .HasOne( lib => lib.Library )
-                .WithMany( libBook => libBook.LibraryBooks )
-                .HasForeignKey( lib => lib.LibraryId );
+                    .HasOne( lib => lib.Library )
+                    .WithMany( libBook => libBook.LibraryBooks )
+                    .HasForeignKey( lib => lib.LibraryId );
+
     }
 
 }

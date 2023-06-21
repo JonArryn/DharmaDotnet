@@ -16,6 +16,7 @@ public class DTOGetBook {
     public int Id { get; set; }
     public string Title { get; set; }
     public int AuthorId { get; set; }
+    public DTOAuthor Author { get; set; }
 
 }
 
@@ -23,5 +24,6 @@ public class DTOCreateBook {
 
     public string Title { get; set; }
     public int? AuthorId { get; set; }
+    public DTOCreateAuthor? Author { get; set; }
 
 }

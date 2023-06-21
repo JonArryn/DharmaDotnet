@@ -15,7 +15,7 @@ public class BookController : DharmaController {
 
     public BookController( IBookRepo bookRepo, IMapper mapper ) {
         _bookRepo = bookRepo;
-        _mapper   = mapper;
+        _mapper = mapper;
     }
 
     [HttpGet]
@@ -33,24 +33,23 @@ public class BookController : DharmaController {
     }
 
     [HttpPost]
-    public async Task<ActionResult<Book>> CreateNewBook( Book newBook ) {
-        var createdBook = await _bookRepo.CreateNewBook( newBook );
+    public async Task<ActionResult<DTOGetBook>> CreateNewBook( DTOCreateBook newBookDto ) {
+        var createdBook = await _bookRepo.InsertBook( newBookDto );
 
         return CreateResponse( createdBook );
     }
 
     // TODO update this to merge provided fields with existing data then save rather than explicitly updating fields
     [HttpPut( "{id}" )]
-    public async Task<ActionResult<Book>> UpdateBook( int id, Book newBookData ) {
-        var updatedBook = await _bookRepo.UpdateBook( id,
-                newBookData );
+    public async Task<ActionResult<DTOGetBook>> UpdateBook( int id, DTOCreateBook newBookData ) {
+        var updatedBook = await _bookRepo.UpdateBook( id, newBookData );
 
         return CreateResponse( updatedBook );
     }
 
     // TODO change to deleted at timestamp and return nothing
     [HttpDelete( "{id}" )]
-    public async Task<ActionResult<Book>> DeleteBook( int id ) {
+    public async Task<ActionResult<DTOGetBook>> DeleteBook( int id ) {
         var deletedBook = await _bookRepo.DeleteBook( id );
 
         return CreateResponse( deletedBook );
