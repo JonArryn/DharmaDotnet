@@ -19,10 +19,27 @@ public class BookController : DharmaController {
     }
 
     [HttpGet]
-    public async Task<ActionResult<ICollection<DTOGetBook>>> GetAllBooks() {
-        var bookList = _mapper.Map<ICollection<DTOGetBook>>( await _bookRepo.GetAllBooks() );
+    public async Task<ActionResult<ICollection<DTOGetBook>>>
+            GetAllBooks( [FromQuery( Name = "embed" )] string? embed ) {
 
-        return CreateResponse( bookList );
+        switch (embed) {
+            case null:
+            {
+                var bookList = _mapper.Map<ICollection<DTOGetBook>>( await _bookRepo.GetAllBooks() );
+
+                return CreateResponse( bookList );
+            }
+            case "author":
+            {
+                var bookListWithAuthor =
+                        _mapper.Map<ICollection<DTOGetBook>>( await _bookRepo.GetAllBooksWithAuthor() );
+
+                return CreateResponse( bookListWithAuthor );
+            }
+            default:
+                return BadRequest( "Invalid embed" );
+        }
+
     }
 
     [HttpGet( "{id}" )]
@@ -34,7 +51,7 @@ public class BookController : DharmaController {
 
     [HttpPost]
     public async Task<ActionResult<DTOGetBook>> CreateNewBook( DTOCreateBook newBookDto ) {
-        var createdBook = await _bookRepo.InsertBook( newBookDto );
+        var createdBook = await _bookRepo.CreateBook( newBookDto );
 
         return CreateResponse( createdBook );
     }

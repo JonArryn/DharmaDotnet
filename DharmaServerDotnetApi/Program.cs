@@ -4,7 +4,8 @@ using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder( args );
 
-builder.Services.AddDbContext<DharmaDbContext>( options => options.UseSqlServer( builder.Configuration.GetConnectionString( "Local" ) ) );
+builder.Services.AddDbContext<DharmaDbContext>(
+options => options.UseSqlServer( builder.Configuration.GetConnectionString( "Local" ) ) );
 
 // Add services to the container.
 
@@ -15,7 +16,8 @@ builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-builder.AddServiceRepo();
+builder.Services.AddRepositories();
+builder.Services.AddHelpers();
 
 builder.Services.AddAutoMapper( typeof(AutoMapperConfig).Assembly );
 

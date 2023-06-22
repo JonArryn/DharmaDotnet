@@ -1,8 +1,9 @@
+using DharmaServerDotnetApi.Helpers;
+
 namespace DharmaServerDotnetApi.Models;
 
-public class LibraryBook {
+public class LibraryBook : BaseEntity {
 
-    public int Id { get; set; }
     public int BookId { get; set; }
     public Book Book { get; set; }
     public int LibraryId { get; set; }

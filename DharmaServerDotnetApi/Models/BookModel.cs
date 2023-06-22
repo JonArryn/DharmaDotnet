@@ -1,17 +1,26 @@
+using DharmaServerDotnetApi.Helpers;
+
 namespace DharmaServerDotnetApi.Models;
 
-public class Book {
+public class Book : BaseEntity {
 
-    public int Id { get; set; }
     public string Title { get; set; }
-    public int? AuthorId { get; set; }
-    public Author? Author { get; set; }
+    public int AuthorId { get; set; }
+    public Author Author { get; set; }
     public ICollection<LibraryBook>? LibraryBooks { get; set; }
-    public DateTime? CreatedAt { get; set; } = DateTime.UtcNow;
+    public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
 
 }
 
 public class DTOGetBook {
+
+    public int Id { get; set; }
+    public string Title { get; set; }
+    public int AuthorId { get; set; }
+
+}
+
+public class DTOGetBookWithAuthor {
 
     public int Id { get; set; }
     public string Title { get; set; }
@@ -23,7 +32,6 @@ public class DTOGetBook {
 public class DTOCreateBook {
 
     public string Title { get; set; }
-    public int? AuthorId { get; set; }
-    public DTOCreateAuthor? Author { get; set; }
+    public int AuthorId { get; set; }
 
 }
