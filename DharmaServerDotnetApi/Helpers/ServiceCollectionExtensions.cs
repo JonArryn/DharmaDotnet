@@ -10,7 +10,7 @@ public static class RepositoryService {
     }
 
     public static void AddHelpers( this IServiceCollection services ) {
-        services.AddScoped<IHelperRepo, HelperRepo>();
+        services.AddScoped<IBaseRepo, BaseRepo>();
     }
 
 }

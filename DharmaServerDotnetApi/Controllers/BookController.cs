@@ -19,13 +19,15 @@ public class BookController : DharmaController {
     }
 
     [HttpGet]
-    public async Task<ActionResult<ICollection<DTOGetBook>>>
-            GetAllBooks( [FromQuery( Name = "embed" )] string? embed ) {
+    public async Task<ActionResult<ICollection<DTOGetBook>>> GetAllBooks(
+            [FromQuery( Name = "embed" )] string? embed,
+            [FromQuery] QueryParams queryParams
+    ) {
 
         switch (embed) {
             case null:
             {
-                var bookList = _mapper.Map<ICollection<DTOGetBook>>( await _bookRepo.GetAllBooks() );
+                var bookList = _mapper.Map<ICollection<DTOGetBook>>( await _bookRepo.GetAllBooks( queryParams ) );
 
                 return CreateResponse( bookList );
             }
@@ -43,8 +45,8 @@ public class BookController : DharmaController {
     }
 
     [HttpGet( "{id}" )]
-    public async Task<ActionResult<DTOGetBook>> GetBookById( int id ) {
-        var book = _mapper.Map<DTOGetBook>( await _bookRepo.GetBookById( id ) );
+    public async Task<ActionResult<DTOGetBook>> GetBookById( int id, [FromQuery] QueryParams queryParams ) {
+        var book = _mapper.Map<DTOGetBook>( await _bookRepo.GetBookById( id, queryParams ) );
 
         return CreateResponse( book );
     }
