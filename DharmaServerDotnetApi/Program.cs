@@ -7,6 +7,10 @@ var builder = WebApplication.CreateBuilder( args );
 builder.Services.AddDbContext<DharmaDbContext>(
 options => options.UseSqlServer( builder.Configuration.GetConnectionString( "Local" ) ) );
 
+// Add CORS
+
+builder.AddCors();
+
 // Add services to the container.
 
 builder.Services.AddControllers();
@@ -28,6 +32,8 @@ if (app.Environment.IsDevelopment()) {
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+
+app.UseCors( "AllowSpecificOrigins" );
 
 app.UseHttpsRedirection();
 

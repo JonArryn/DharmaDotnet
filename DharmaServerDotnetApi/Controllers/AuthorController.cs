@@ -13,9 +13,9 @@ public class AuthorController : DharmaController {
     private readonly IAuthorRepo _authorRepo;
     private readonly IMapper _mapper;
 
-    public AuthorController( IAuthorRepo _authorRepo, IMapper _mapper ) {
-        this._authorRepo = _authorRepo;
-        this._mapper     = _mapper;
+    public AuthorController( IAuthorRepo authorRepo, IMapper mapper ) {
+        _authorRepo = authorRepo;
+        _mapper     = mapper;
     }
 
     [HttpGet]
